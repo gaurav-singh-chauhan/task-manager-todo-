@@ -2,7 +2,6 @@ const taskService = require("../services/task.service");
 
 const getAllTasks = async (req, res) => {
   const { id } = req.user;
-  console.log(id)
   try {
     const tasks = await taskService.getAllTasks(id);
     if (!tasks) {
@@ -15,11 +14,11 @@ const getAllTasks = async (req, res) => {
 };
 
 const createTask = async (req, res) => {
-  const { title } = req.body;
+  const { title, description } = req.body;
   const { id } = req.user;
 
   try {
-    const task = await taskService.create(title, id);
+    const task = await taskService.create(title, description, id);
     res.status(200).json({ message: "Task created", task });
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -28,11 +27,11 @@ const createTask = async (req, res) => {
 
 const editTask = async (req, res) => {
   const { taskId } = req.params;
-  const userId = req.user.id;
-  const { newTitle } = req.body;
+  const {id} = req.user;
+  const { newTitle, newDescription } = req.body;
 
   try {
-    const task = await taskService.edit(taskId, userId, newTitle);
+    const task = await taskService.edit(newTitle, newDescription, taskId, id);
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }

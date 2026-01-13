@@ -13,6 +13,13 @@ const Task = sequelize.define(
     title: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    description: {
+      type: DataTypes.STRING
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false
     }
   },
   {
@@ -20,5 +27,12 @@ const Task = sequelize.define(
     timestamps: false,
   }
 );
+
+Task.associate = (models) => {
+  Task.belongsTo(models.User, {
+    foreignKey: 'userId',
+    as: 'user'
+  });
+};
 
 module.exports = Task;

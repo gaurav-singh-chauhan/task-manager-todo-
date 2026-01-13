@@ -32,4 +32,11 @@ const User = sequelize.define(
   }
 );
 
+User.associate = (models) => {
+  User.hasMany(models.Task, {
+    foreignKey: 'userId',
+    as: 'tasks'
+  });
+};
+
 module.exports = User;

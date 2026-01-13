@@ -2,28 +2,30 @@ const taskModel = require("../models/task.model");
 
 const getAllTasks = async (userId) => {
   const tasks = await taskModel.findAll({ where: { userId: userId } });
-  if(!tasks){
+  if (!tasks) {
     return false;
   }
   return tasks;
 };
 
-const create = async (title, id) => {
+const create = async (title, description, id) => {
   const task = await taskModel.create({
     title,
+    description,
     userId: id,
   });
   return task;
 };
 
-const edit = async (taskId, userId, newTitle) => {
+const edit = async (newTitle, newDescription, taskId, id) => {
   const task = await taskModel.findOne({
-    where: { id: taskId },
+    where: { id: taskId, userId: id },
   });
   if (!task) {
     throw new Error("Task not found");
   }
   task.title = newTitle;
+  task.description = newDescription;
   await task.save();
   return task;
 };
@@ -43,5 +45,5 @@ module.exports = {
   create,
   edit,
   deleteTask,
-  getAllTasks
+  getAllTasks,
 };
