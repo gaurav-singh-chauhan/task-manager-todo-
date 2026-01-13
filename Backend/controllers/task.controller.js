@@ -4,8 +4,8 @@ const getAllTasks = async (req, res) => {
   const { id } = req.user;
   try {
     const tasks = await taskService.getAllTasks(id);
-    if (!tasks) {
-      return res.status(404).json({ message: "User doesn't have any task" });
+    if (tasks.length === 0) {
+      return res.status(200).json({ message: "User doesn't have any task" });
     }
     res.status(200).json(tasks);
   } catch (err) {
@@ -27,7 +27,7 @@ const createTask = async (req, res) => {
 
 const editTask = async (req, res) => {
   const { taskId } = req.params;
-  const {id} = req.user;
+  const { id } = req.user;
   const { newTitle, newDescription } = req.body;
 
   try {
