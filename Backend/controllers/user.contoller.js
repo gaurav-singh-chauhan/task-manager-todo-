@@ -10,6 +10,7 @@ async function hashPassword(password) {
 
 function generateAuthToken(user) {
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+  console.log(token);
   return token;
 }
 
@@ -34,9 +35,9 @@ const register = async (req, res) => {
       hashedPassword
     );
 
-    const token = generateAuthToken(user);
+    // const token = generateAuthToken(user);
 
-    res.cookie("token", token);
+    // res.cookie("token", token);
 
     res.status(200).json({ message: "User successfully registered", user });
   } catch (err) {
@@ -54,12 +55,14 @@ const login = async (req, res) => {
   try {
     const user = await userService.logInUser(email, password);
     if (!user) {
-      return res.status(404).json({ message: "Inavlid email or password" });
+      return res.status(404).json({ message: "Invalid email or password" });
     }
     const token = generateAuthToken(user);
-    res.cookie("token", token);
-    res.redirect("/task");
-    // res.status(200).json({ msg: "true" });
+    res.cookie("token", token, {
+      httpOnly: false,
+      secure: false
+    });
+    res.status(200).json({ message: "Welcome Back :)" });
   } catch (err) {
     return res.status(401).json({ message: err.message });
   }
@@ -79,7 +82,7 @@ const deleteUser = async (req, res) => {
   try {
     const user = await userService.deleteUser(email, password);
     if (!user) {
-      return res.status(404).json({ message: "Inavlid email or password" });
+      return res.status(404).json({ message: "Invalid email or password" });
     }
     if (user) {
       res.clearCookie("token");

@@ -8,6 +8,15 @@ const user = require("./routes/user.route");
 const task = require("./routes/task.route");
 const cookie = require("cookie-parser");
 const authUser = require("./middlewares/auth.middlware");
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 const server = createServer(app);
 
@@ -15,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookie());
+
 
 app.use("/user", user);
 app.use("/task", authUser, task);

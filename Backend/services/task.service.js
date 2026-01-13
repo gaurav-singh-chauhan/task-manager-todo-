@@ -2,9 +2,6 @@ const taskModel = require("../models/task.model");
 
 const getAllTasks = async (userId) => {
   const tasks = await taskModel.findAll({ where: { userId: userId } });
-  if (!tasks) {
-    return false;
-  }
   return tasks;
 };
 

@@ -5,9 +5,9 @@ const getAllTasks = async (req, res) => {
   try {
     const tasks = await taskService.getAllTasks(id);
     if (tasks.length === 0) {
-      return res.status(200).json({ message: "User doesn't have any task" });
+      return res.status(200).json({ message: "User doesn't have any task", task: tasks });
     }
-    res.status(200).json(tasks);
+    res.status(200).json({task:tasks});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
