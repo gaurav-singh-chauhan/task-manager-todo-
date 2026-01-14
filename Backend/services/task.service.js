@@ -38,9 +38,22 @@ const deleteTask = async (taskId, userId) => {
   return true;
 };
 
+const getTask = async (taskId) => {
+  try{
+    const task = await taskModel.findByPk(taskId);
+    if(!task){
+      return task;
+    }
+    return task;
+  } catch(err){
+    console.log(err.message);
+  }
+};
+
 module.exports = {
   create,
   edit,
   deleteTask,
   getAllTasks,
+  getTask
 };

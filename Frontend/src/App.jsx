@@ -21,8 +21,22 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/user/home/create" element={<CreateTask />} />
-        <Route path="/user/home/edit" element={<EditTask />} />
+        <Route
+          path="/user/home/create"
+          element={
+            <ProtectedRoute>
+              <CreateTask />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user/home/edit/:taskId"
+          element={
+            <ProtectedRoute>
+              <EditTask />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

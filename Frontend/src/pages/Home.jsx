@@ -24,10 +24,12 @@ const Home = () => {
 
   const handleDelete = async (taskId) => {
     try {
-      const res = await axios.delete(`http://localhost:3000/task/delete/${taskId}`);
+      const res = await axios.delete(
+        `http://localhost:3000/task/delete/${taskId}`
+      );
       alert(res.data.message);
 
-      setTasks((prevTasks) => prevTasks.filter((item) => item.id !== taskId ));
+      setTasks((prevTasks) => prevTasks.filter((item) => item.id !== taskId));
     } catch (err) {
       console.log(err);
     }
@@ -35,8 +37,16 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center py-10">
+      {/* Top heading */}
+      <div className="text-center py-6">
+        <h1 className="text-3xl font-bold text-gray-900">
+          Welcome to <span className="text-blue-600">TaskManager</span>
+        </h1>
+      </div>
+
       <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-8">
         {/* Header */}
+
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">All Tasks</h1>
           <Link to="/user/home/create">
@@ -69,13 +79,14 @@ const Home = () => {
 
                 {/* Actions */}
                 <div className="flex gap-3">
-                  <button
-                    onClick={() => handleEdit(task.id)}
-                    className="p-2 text-blue-600 hover:bg-blue-50 rounded transition"
-                    title="Edit"
-                  >
-                    <FiEdit2 size={18} />
-                  </button>
+                  <Link to={`/user/home/edit/${task.id}`}>
+                    <button
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded transition"
+                      title="Edit"
+                    >
+                      <FiEdit2 size={18} />
+                    </button>
+                  </Link>
 
                   <button
                     onClick={() => handleDelete(task.id)}

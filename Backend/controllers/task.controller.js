@@ -5,9 +5,11 @@ const getAllTasks = async (req, res) => {
   try {
     const tasks = await taskService.getAllTasks(id);
     if (tasks.length === 0) {
-      return res.status(200).json({ message: "User doesn't have any task", task: tasks });
+      return res
+        .status(200)
+        .json({ message: "User doesn't have any task", task: tasks });
     }
-    res.status(200).json({task:tasks});
+    res.status(200).json({ task: tasks });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -29,6 +31,8 @@ const editTask = async (req, res) => {
   const { taskId } = req.params;
   const { id } = req.user;
   const { newTitle, newDescription } = req.body;
+
+  console.log(`taskId: ${taskId}, userId: ${id}, newTitle: ${newTitle}, newDescription: ${newDescription}`);
 
   try {
     const task = await taskService.edit(newTitle, newDescription, taskId, id);
@@ -55,9 +59,24 @@ const deleteTask = async (req, res) => {
   }
 };
 
+const getDetails = async (req, res) => {
+  const { taskId } = req.params;
+
+  try {
+    const task = await taskService.getTask(taskId);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res.status(200).json(task);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getAllTasks,
   createTask,
   editTask,
   deleteTask,
+  getDetails
 };
