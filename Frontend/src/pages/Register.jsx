@@ -1,7 +1,9 @@
-import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../features/authSlice';
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [ firstname, setFirstname ] = useState("");
@@ -9,6 +11,7 @@ const Register = () => {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,8 +23,8 @@ const Register = () => {
     };
     
     try{
-        const res = await axios.post("http://localhost:3000/user/register", payload);
-        alert(res.data.message);
+        const res = await dispatch(registerUser(payload)).unwrap();
+        toast.success(res.message);
         navigate("/user/login");
     } catch(err){
         console.log(err.message);
@@ -55,6 +58,7 @@ const Register = () => {
               onChange={(e)=>setFirstname(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md
                          focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -93,6 +97,7 @@ const Register = () => {
               onChange={(e)=>setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md
                          focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -112,6 +117,7 @@ const Register = () => {
               onChange={(e)=>setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md
                          focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 

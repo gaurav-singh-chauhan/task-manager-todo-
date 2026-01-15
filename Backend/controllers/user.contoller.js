@@ -50,7 +50,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    throw new Error("All fields are required");
+    return res.status(500).json({ message: "All fields are required" });
   }
   try {
     const user = await userService.logInUser(email, password);
@@ -60,7 +60,7 @@ const login = async (req, res) => {
     const token = generateAuthToken(user);
     res.cookie("token", token, {
       httpOnly: false,
-      secure: false
+      secure: false,
     });
     res.status(200).json({ message: "Welcome Back :)" });
   } catch (err) {
@@ -93,9 +93,23 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getName = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const user = await userService.getName(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ username: user.firstname });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   deleteUser,
+  getName,
 };

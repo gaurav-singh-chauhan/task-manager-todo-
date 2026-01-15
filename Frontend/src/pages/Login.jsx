@@ -1,30 +1,30 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../features/authSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-        email,
-        password
+      email,
+      password,
     };
 
-    try{
-        const res = await axios.post("http://localhost:3000/user/login", payload, {
-            withCredentials: true
-        });
-        alert(res.data.message);
-        navigate("/user/home");
-
-    } catch(err){
-        console.log(err.message);
+    try {
+      const res = await dispatch(loginUser(payload)).unwrap();
+      toast.info(res.message);
+      navigate("/user/home");
+    } catch (err) {
+      console.log(err.message);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-8">
@@ -45,9 +45,10 @@ const Login = () => {
               id="email"
               name="email"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md
                          focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -64,9 +65,10 @@ const Login = () => {
               id="password"
               name="password"
               value={password}
-              onChange={(e)=>setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md
                          focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 

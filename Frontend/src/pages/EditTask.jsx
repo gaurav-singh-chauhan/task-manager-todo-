@@ -1,18 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { updateTask } from '../features/taskSlice';
+import { toast } from "react-toastify";
 
 const EditTask = () => {
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const { taskId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(()=>{
     const fetchTaskDetails = async() => {
       try{
       const res = await axios.get(`http://localhost:3000/task/getDetails/${taskId}`);
-      // console.log(res.data);
       setNewTitle(res.data.title);
       setNewDescription(res.data.description);
       } catch(err){
@@ -20,15 +23,15 @@ const EditTask = () => {
       }
     }
     fetchTaskDetails();
-  }, []);
+  }, [taskId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
       const payload = { newTitle, newDescription };
-      const res = await axios.put(`http://localhost:3000/task/edit/${taskId}`, payload, { withCredentials: true});
-      alert(res.data.message);
-      navigate("/user/home")
+      const res = await dispatch(updateTask({ taskId, taskData: payload })).unwrap();
+      toast.success(res.message);
+      navigate("/user/home");
     } catch(err){
       console.log(err);
     }

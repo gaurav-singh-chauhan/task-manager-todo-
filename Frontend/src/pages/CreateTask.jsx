@@ -1,11 +1,14 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { createTask } from '../features/taskSlice';
+import { toast } from "react-toastify";
 
 const CreateTask = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,12 +16,9 @@ const CreateTask = () => {
     const payload = { title, description };
 
     try {
-      const res = await axios.post("http://localhost:3000/task/create", payload, {
-        withCredentials: true,
-      });
-
+      const res = await dispatch(createTask(payload)).unwrap();
+      toast.success(res.message);
       navigate("/user/home");
-      alert(res.data.message);
     } catch (err) {
       console.error(err);
     }
@@ -64,7 +64,6 @@ const CreateTask = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
             />
           </div>
 
