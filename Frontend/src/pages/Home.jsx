@@ -1,19 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, deleteTask } from "../features/taskSlice";
 import { toast } from "react-toastify";
 import { logoutUser } from "../features/authSlice";
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { tasks, loading, error } = useSelector((state) => state.tasks);
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
+
+  useEffect(() => {
+    const getUsername = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/user/getUser", {
+          withCredentials: true,
+        });
+        setUsername(res.data.username);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUsername();
+  }, []);
 
   const handleDelete = async (taskId) => {
     await dispatch(deleteTask(taskId))
@@ -36,6 +52,11 @@ const Home = () => {
     }
   };
 
+  function capitalizeFirstLetter(str) {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -44,19 +65,22 @@ const Home = () => {
       <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-8">
         {/* Header */}
         {/* Top heading */}
-        <div className="text-center py-6">
+        <div className="py-6">
           <h1 className="text-3xl font-bold text-gray-900">
-            Welcome to <span className="text-blue-600">TaskManager</span>
+            Welcome{" "}
+            <span className="text-blue-600">
+              {capitalizeFirstLetter(username)}...
+            </span>
           </h1>
+
+          <p className="text-gray-500 mt-1">
+            This is what you’re working on today...
+          </p>
         </div>
 
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">All Tasks</h1>
-          {/* <Link to="/user/home/create">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-              Create Task
-            </button>
-          </Link> */}
+
           <div className="flex items-center gap-3">
             <Link to="/user/home/create">
               <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
@@ -76,7 +100,7 @@ const Home = () => {
         {/* Empty state */}
         {tasks.length === 0 && (
           <p className="text-gray-500 text-center mt-10">
-            You don't have any tasks
+            You don't have any tasks...
           </p>
         )}
 

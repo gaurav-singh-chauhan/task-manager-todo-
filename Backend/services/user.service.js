@@ -39,8 +39,17 @@ const deleteUser = async (email, password) => {
   return deleted;
 };
 
+const getUser = async (id) => {
+  const user = await userModel.findByPk(id);
+  if(!user){
+    return;
+  }
+  return user;
+};
+
 module.exports = {
   createUser,
   logInUser,
   deleteUser,
+  getUser
 };
