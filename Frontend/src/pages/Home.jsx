@@ -30,20 +30,13 @@ const Home = () => {
   }, []);
 
   const handleDelete = async (taskId) => {
-    try {
-      const res = await dispatch(deleteTask(taskId)).unwrap();
-      console.log(res);
-      toast.success(res.data.message);
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(deleteTask(taskId));
   };
 
   function capitalizeFirstLetter(str) {
-  if (!str) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -51,12 +44,14 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center py-10">
       <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-8">
-
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Welcome back, <span className="text-blue-600">{capitalizeFirstLetter(username)}...</span>
+              Welcome!{" "}
+              <span className="text-blue-600">
+                {capitalizeFirstLetter(username)}...
+              </span>
             </h1>
             <p className="text-sm text-gray-500 mt-1">
               Here’s what you’re working on today...
@@ -73,7 +68,7 @@ const Home = () => {
         {/* Empty state */}
         {tasks.length === 0 && (
           <p className="text-gray-500 text-center mt-10">
-            You don't have any tasks
+            You don't have any task yet...
           </p>
         )}
 
@@ -86,7 +81,7 @@ const Home = () => {
                 className="flex justify-between items-start border border-gray-200 rounded p-4 hover:shadow-sm transition"
               >
                 {/* Task info */}
-                <div>
+                <div className="text-left">
                   <h3 className="font-semibold text-gray-700">{task.title}</h3>
                   <p className="text-sm text-gray-500">{task.description}</p>
                 </div>
