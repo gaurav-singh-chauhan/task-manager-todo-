@@ -6,6 +6,11 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) 
   return response.data;
 });
 
+export const logoutUser = createAsyncThunk('auth/logoutUsr', async () => {
+  const response = await axios.post("http://localhost:3000/user/logout", { withCredentials: true });
+  return response.data;
+})
+
 export const registerUser = createAsyncThunk('auth/registerUser', async (userData) => {
   const response = await axios.post('http://localhost:3000/user/register', userData, { withCredentials: true });
   return response.data;
@@ -27,6 +32,9 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(loginUser.fulfilled, (state) => {
         state.loading = false;
         state.user = { loggedIn: true };
@@ -40,8 +48,20 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
+        // Similar to login
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.token = null;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

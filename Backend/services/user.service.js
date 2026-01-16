@@ -39,17 +39,8 @@ const deleteUser = async (email, password) => {
   return deleted;
 };
 
-const getName = async (id) => {
-  const user = await userModel.findByPk(id);
-  if(!user){
-    return;
-  }
-  return user;
-};
-
 module.exports = {
   createUser,
   logInUser,
   deleteUser,
-  getName
 };
