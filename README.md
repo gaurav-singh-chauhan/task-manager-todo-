@@ -117,7 +117,7 @@ Todo App/
 │   ├── app.js                 # Main server file
 │   ├── package.json
 │   ├── config/
-│   │   ├── config.json        # Sequelize config
+│   │   ├── config.js         # Sequelize config
 │   │   └── db.js              # Database connection
 │   ├── controllers/           # Route controllers
 │   ├── middlewares/           # Authentication middleware

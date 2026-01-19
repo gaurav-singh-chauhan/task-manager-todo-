@@ -11,27 +11,28 @@ const Task = sequelize.define(
       allowNull: false,
     },
     title: {
-        type: DataTypes.STRING,
-        allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     description: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     userId: {
       type: DataTypes.UUID,
-      allowNull: false
-    }
+      allowNull: false,
+    },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     tableName: "tasks",
-    timestamps: false,
   }
 );
 
 Task.associate = (models) => {
   Task.belongsTo(models.User, {
-    foreignKey: 'userId',
-    as: 'user'
+    foreignKey: "userId",
+    as: "user",
   });
 };
 

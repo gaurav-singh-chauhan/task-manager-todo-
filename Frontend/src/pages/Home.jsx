@@ -104,6 +104,10 @@ const Home = () => {
           </p>
         )}
 
+
+        {/* add task inputs */}
+        
+
         {/* Task list */}
         {tasks.length > 0 && (
           <ul className="space-y-4">

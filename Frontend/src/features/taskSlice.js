@@ -8,7 +8,7 @@ export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
 
 export const createTask = createAsyncThunk('tasks/createTask', async (taskData, { dispatch }) => {
   const response = await axios.post('http://localhost:3000/task/create', taskData, { withCredentials: true });
-  dispatch(fetchTasks());
+  // dispatch(fetchTasks());
   return response.data;
 });
 

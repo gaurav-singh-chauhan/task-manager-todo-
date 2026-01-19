@@ -32,5 +32,4 @@ app.use("/task", authUser, task);
 server.listen(port, async () => {
   console.log(`Server is listening to ${port}`);
   await authDb();
-  await sequelize.sync({ alter: true });
 });

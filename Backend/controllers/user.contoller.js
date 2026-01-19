@@ -15,12 +15,11 @@ function generateAuthToken(user) {
 }
 
 const register = async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
-  if (!firstname || !email || !password) {
-    throw new Error("* fields are required");
-  }
-
   try {
+    const { firstname, lastname, email, password } = req.body;
+    if (!firstname || !email || !password) {
+      throw new Error("* fields are required");
+    }
     const isAlreadyExisted = await userModel.findOne({
       where: { email: email },
     });

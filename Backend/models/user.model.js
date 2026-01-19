@@ -13,6 +13,12 @@ const User = sequelize.define(
     firstname: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: {
+          args: [3, 255],
+          msg: "Username must be at least 3 characters long",
+        },
+      },
     },
     lastname: {
       type: DataTypes.STRING,
@@ -20,22 +26,26 @@ const User = sequelize.define(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE,
   },
   {
     tableName: "users",
-    timestamps: false,
   }
 );
 
 User.associate = (models) => {
   User.hasMany(models.Task, {
-    foreignKey: 'userId',
-    as: 'tasks'
+    foreignKey: "userId",
+    as: "tasks",
+    onDelete: "CASCADE",
+    hooks: true
   });
 };
 
