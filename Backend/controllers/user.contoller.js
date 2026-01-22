@@ -8,9 +8,8 @@ async function hashPassword(password) {
   return await bcrypt.hash(password, 10);
 }
 
-function generateAuthToken(user) {
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-  console.log(token);
+function generateAuthToken(userId) {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET);
   return token;
 }
 
@@ -31,12 +30,12 @@ const register = async (req, res) => {
       firstname,
       lastname,
       email,
-      hashedPassword
+      hashedPassword,
     );
 
-    // const token = generateAuthToken(user);
+    const token = generateAuthToken(user.id);
 
-    // res.cookie("token", token);
+    res.cookie("token", token);
 
     res.status(200).json({ message: "User successfully registered", user });
   } catch (err) {
@@ -56,12 +55,12 @@ const login = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "Invalid email or password" });
     }
-    const token = generateAuthToken(user);
+    const token = generateAuthToken(user.id);
     res.cookie("token", token, {
       httpOnly: false,
       secure: false,
     });
-    res.status(200).json({ message: "Welcome Back :)" });
+    res.status(200).json({ message: "Welcome :)" });
   } catch (err) {
     return res.status(401).json({ message: err.message });
   }

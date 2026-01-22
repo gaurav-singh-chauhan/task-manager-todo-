@@ -25,7 +25,9 @@ const Register = () => {
     try{
         const res = await dispatch(registerUser(payload)).unwrap();
         toast.success(res.message);
-        navigate("/user/login");
+        // navigate("/user/login");
+        navigate("/user/home");
+        toast.info("Welcome :)");
     } catch(err){
         console.log(err.message);
     }
